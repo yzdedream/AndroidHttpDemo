@@ -24,8 +24,8 @@ public class HttpRequestAysnc {
 
 
     private class HttpGetRunnable implements Runnable {
-        private String url;
-        private Handler handler;
+        protected String url;
+        protected Handler handler;
 
         public HttpGetRunnable(String url, Handler handler) {
             this.url = url;
@@ -34,36 +34,31 @@ public class HttpRequestAysnc {
 
         @Override
         public void run() {
-            String result;
-            result = HttpRequest.httpGet(this.url);
-            Message message = Message.obtain();
-            message.obj = result;
+            String result = HttpRequest.httpGet(this.url);
+            sendMessage(result);
+        }
 
+        protected void sendMessage(String szMessage) {
+            Message message = Message.obtain();
+            message.obj = szMessage;
             handler.sendMessage(message);
         }
     }
 
-    private class HttpGetAuthRunnable implements Runnable {
-        private String url;
+    private class HttpGetAuthRunnable extends HttpGetRunnable implements Runnable {
         private String username;
         private String password;
-        private Handler handler;
 
         public HttpGetAuthRunnable(String url, String usernmae, String password, Handler handler) {
-            this.url = url;
-            this.handler = handler;
+            super(url, handler);
             this.username = usernmae;
             this.password = password;
         }
 
         @Override
         public void run() {
-            String result;
-            result = HttpRequest.httpGetAuth(url, username, password);
-            Message message = Message.obtain();
-            message.obj = result;
-
-            handler.sendMessage(message);
+            String result = HttpRequest.httpGetAuth(url, username, password);
+            sendMessage(result);
         }
     }
 }
