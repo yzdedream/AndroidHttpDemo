@@ -13,6 +13,7 @@ import java.net.UnknownHostException;
 /**
  * Created by Kelvin on 2015/11/20.
  */
+
 public class HttpRequest {
     private HttpRequest() {
 
