@@ -16,22 +16,22 @@ public class TestHttp extends AndroidTestCase {
         httpRequest = HttpRequest.getInstance();
     }
 
-    public void testHttpGet(){
+    public void testHttpGet() {
         assertTrue(httpRequest.httpGet("http://www.bbc.com") != "");
     }
 
-    public void testHttpsGet(){
+    public void testHttpsGet() {
         // well if you run this in china it will fail
         // but it has nothing to do with the code
         assertTrue(httpRequest.httpGet("https://www.google.com") != "");
     }
 
-    public void testIllegalUrl(){
+    public void testIllegalUrl() {
         assertTrue(HttpRequest.httpGet("thisIsAIllegalUrl") == "");
     }
 
-    public void testHttpsLogin(){
-        String result = HttpRequest.httpGetAuth("https://aukene.fi/api/address/?format=json", "admin", "adm1n1strat0r");
+    public void testHttpsLogin() {
+        String result = HttpRequest.httpGetAuth("", "", "");
 
         assertTrue(result != "");
     }
