@@ -29,4 +29,10 @@ public class TestHttp extends AndroidTestCase {
     public void testIllegalUrl(){
         assertTrue(HttpRequest.httpGet("thisIsAIllegalUrl") == "");
     }
+
+    public void testHttpsLogin(){
+        String result = HttpRequest.httpGetAuth("https://aukene.fi/api/address/?format=json", "admin", "adm1n1strat0r");
+
+        assertTrue(result != "");
+    }
 }

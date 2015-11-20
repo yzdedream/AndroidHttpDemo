@@ -18,18 +18,19 @@ public class MainActivity extends AppCompatActivity {
         testHttpGetAsync();
     }
 
-    private void testHttpGetAsync(){
+    private void testHttpGetAsync() {
         HttpRequestAysnc httpRequestAysnc = new HttpRequestAysnc();
         Handler handler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
-                String result = msg.toString();
+                String result = msg.obj.toString();
                 Log.e(TAG, result);
             }
         };
 
         httpRequestAysnc.HttpGetAsync("http://www.bbc.com", handler);
+        httpRequestAysnc.HttpGetAuthAsync("", "", "", handler);
     }
 
 }

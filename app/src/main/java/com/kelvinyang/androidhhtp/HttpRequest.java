@@ -1,5 +1,7 @@
 package com.kelvinyang.androidhhtp;
 
+import android.nfc.Tag;
+import android.util.Base64;
 import android.util.Log;
 
 import java.io.BufferedReader;
@@ -31,30 +33,56 @@ public class HttpRequest {
         return instance;
     }
 
+    private static HttpURLConnection buildConnection(String szUrl) {
+        HttpURLConnection connection = null;
+        try {
+            URL url = new URL(szUrl);
+            connection = (HttpURLConnection) url.openConnection();
+        } catch (Exception e) {
+            Log.e(TAG, "" + e);
+        }
+
+        return connection;
+    }
+
     public static String httpGet(String szUrl) {
         String result = "";
         try {
-            result = readContentFromGet(szUrl);
+            HttpURLConnection connection = buildConnection(szUrl);
+            result = readContentFromGet(connection);
         } catch (Exception e) {
             Log.e(TAG, "" + e);
         }
         return result;
     }
 
-    private static String readContentFromGet(String szURL) throws IOException {
-        HttpURLConnection connection = null;
+    public static String httpGetAuth(String szURL, String username, String password) {
+        String authString = username + ":" + password;
+        byte[] authEncBytes = Base64.encode(authString.getBytes(), Base64.DEFAULT);
+        String authStringEnc = new String(authEncBytes);
+
+        String result = "";
+        try {
+            HttpURLConnection connection = buildConnection(szURL);
+            connection.setRequestProperty("Authorization", "Basic " + authStringEnc);
+            result = readContentFromGet(connection);
+        } catch (Exception e) {
+            Log.e(TAG, "" + e);
+        }
+        return result;
+    }
+
+    private static String readContentFromGet(HttpURLConnection connection) throws IOException {
         String result = "";
         BufferedReader reader = null;
 
         int retryCount = MAX_INTERNET_RETRY;
         while (retryCount > 0) {
             try {
-                URL url = new URL(szURL);
-                connection = (HttpURLConnection) url.openConnection();
                 connection.setConnectTimeout(5000);
                 connection.setReadTimeout(5000);
-
                 connection.connect();
+
                 reader = new BufferedReader(new InputStreamReader(
                         connection.getInputStream()));
 
